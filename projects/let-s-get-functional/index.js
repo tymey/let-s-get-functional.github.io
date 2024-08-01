@@ -86,28 +86,60 @@ var oldestCustomer = (array) => {
 };
 
 /**
- * I: 
- * O: 
- * C: 
- * E: 
+ * I: The function receives an array of objects.
+ * O: The function returns a string representing the 'name' of the object with the
+ *    smallest 'age' property value in the <array>.
+ * C: Must use reduce() method.
+ * E: N/A
  */
 
-var youngestCustomer;
+var youngestCustomer = (array) => {
+    /* Initialize youngestCustomer variable with the value from reducing the array down 
+       to the youngest customer. */
+    let youngestCustomer = reduce(array, (prev, next) => {
+        // Check if prev.age < next.age
+        if (prev.age > next.age) {
+            // Reassign prev to next
+            prev = next;
+        }
+        // Return prev
+        return prev;
+    });
+    // Return youngestCustomer.name to get a string value of the youngest customer's name
+    return youngestCustomer.name;
+};
 
 /**
- * I: 
- * O: 
- * C: 
- * E: 
+ * I: The function receives an array of objects.
+ * O: The fucntion returns a number representing the average balance from all of
+ *    objects' 'balance' property values in the input <array>.
+ * C: Must use reduce() method.
+ * E: N/A
  */
 
-var averageBalance;
+var averageBalance = (array) => {
+    /* Initialize totalBalance variable with the value from reducing the array down
+       to the sum of each object's balance property value; Seed: 0 */
+    let totalBalance = reduce(array, (total, cust) => {
+        // To turn the balance into a number:
+            // Replace all '$' & ',' with nothing ('')
+            // Use parseFloat to turn the string into a number after replacement of characters
+        // Reassign total after adding cust.balance turned into a number
+        total += parseFloat(cust.balance.replaceAll('$', '').replaceAll(',',''));
+        // Return total
+        return total;
+    }, 0);
+    // Return the average of the totalBalance by dividing by array.length
+    return (totalBalance / array.length);
+};
 
 /**
- * I: 
- * O: 
- * C: 
- * E: 
+ * I: The function receives an array of objects and a string representing a single
+ *    character.
+ * O: The function returns a number representing how many customer objects in the
+ *    input array have name a property that begins with a given input letter.
+ * C: Must use reduce() method.
+ * E: N/A
  */
 
 var firstLetterCount;
