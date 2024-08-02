@@ -142,7 +142,9 @@ var averageBalance = (array) => {
  * E: N/A
  */
 
-var firstLetterCount;
+var firstLetterCount = (array, letter) => {
+    
+};
 
 /**
  * I: 
