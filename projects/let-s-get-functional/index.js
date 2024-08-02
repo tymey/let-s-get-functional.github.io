@@ -2,7 +2,7 @@
 
 'use strict';
 
-const { filter, reduce } = require('lodash');
+const { filter, reduce, map, indexOf } = require('lodash');
 var customers = require('./data/customers.json');
 var _ = require('underbar');
 
@@ -143,39 +143,134 @@ var averageBalance = (array) => {
  */
 
 var firstLetterCount = (array, letter) => {
-    
+    /* Return the number from reducing input array while counting all objects with 
+       name property value that begins with input letter. Force to lowercase. */
+    return reduce(array, (prev, current) => {
+        /* Check if the first character of current.name force to lowercase is strictly 
+           equal to target letter forced to lower case. */
+        if (current.name.charAt(0).toLowerCase() === letter.toLowerCase()) {
+            // If true, reassign prev after adding 1
+            prev += 1;
+        }
+        // Return prev
+        return prev;
+    }, 0);
 };
 
 /**
- * I: 
- * O: 
- * C: 
- * E: 
+ * I: The function receives an array, name property value, and a target letter.
+ * O: The function returns a number representing the number of friends a target
+ *    customer with the input name property value from the input array that start
+ *    with the input target letter.
+ * C: N/A
+ * E: N/A
  */
 
-var friendFirstLetterCount;
+var friendFirstLetterCount = (array, customer, letter) => {
+    // Iterate through array using for loop
+    for (let i = 0; i < array.length; i++) {
+        // Check if array[i].name === customer
+        if (array[i].name === customer) {
+            // Count the number of friends' names in array[i] starting with input letter
+            // Use firstLetterCount() function by passing in array[i].friends and letter
+            // Return this value
+            return firstLetterCount(array[i].friends, letter);
+        }
+    }
+};
 
 /**
- * I: 
- * O: 
- * C: 
- * E: 
+ * I: The function receives an array of objects and a name string.
+ * O: The function returns an array of customers' names that have the given input 
+ *    name string in their friends list.
+ * C: Use the filter() and map() methods.
+ * E: N/A
  */
 
-var friendsCount;
+var friendsCount = (array, target) => {
+    /* Filter array for all objects in array that contain target name in the object's
+       friend array and initialize customers variable with this array */
+    let customers = filter(array, (customer) => {
+        // Iterate through customer.friends array
+        for (let i = 0; i < customer.friends.length; i++) {
+            // Check if a friend in customer.friends array contains target name
+            if (customer.friends[i].name === target) {
+                // If true, return true
+                return true;
+            }
+        }
+        // Otherwise, return false
+        return false;
+    });
+    /* Return the array from mapping all of the names from each object in the 
+       customers array */
+    return map(customers, (obj) => obj.name);
+};
 
 /**
- * I: 
- * O: 
- * C: 
- * E: 
+ * I: The function receieves an array of objects.
+ * O: The function returns an array of the three most common tags among all 
+ *    customers' associated tags.
+ * C: N/A
+ * E: N/A
  */
 
-var topThreeTags;
+var topThreeTags = (array) => {
+    // Initialize tagCount variable with an empty array
+    let tagCount = [];
+    /* Initiialize bigTagArray variable with the value from reducing array to
+       an array of all tags in each array assigned to each object in input array */
+    let bigTagArray = _.reduce(array, (prev, customer) => {
+        prev = [...prev, ...customer.tags];
+        return prev;
+    }, []);
+    /* Initialize uniqueTags variable with the value from invoking the unique() function
+       on the bigTagArray */
+    let uniqueTags = _.unique(bigTagArray);
+    // Iterate through uniqueTags array using a for loop
+    for (let i = 0; i < uniqueTags.length; i++) {
+        // Push an object into tagCount containing to properties:
+            // name: uniqueTags[i]
+            // number: Reduce bigTagArray to the number of uniquetags[i] in it
+        tagCount.push({name: uniqueTags[i],
+            number: _.reduce(bigTagArray, (prev, current) => {
+            if (current === uniqueTags[i]) {
+                prev += 1;
+            }
+            return prev;
+        }, 0)})
+    }
+    /* Initialize number1 with the reduction of tagCount down to an object with the
+       highest number property value */
+    let number1 = _.reduce(tagCount, (prev, current) => {
+        if (prev.number < current.number) {
+            prev = current;
+        }
+        return prev;
+    });
+    /* Initialize number2 with the reduction of tagCount down to an object with the
+       highest number property value while ignoring number1 object */
+    let number2 = _.reduce(tagCount, (prev, current) => {
+            if (prev.number < current.number && prev.name !== number1.name && current.name !== number1.name) {
+                prev = current;
+            }
+            return prev;
+        });
+    /* Initialize number2 with the reduction of tagCount down to an object with the
+       highest number property value while ignoring number1 & number2 object */
+    let number3 = _.reduce(tagCount, (prev, current) => {
+            if (prev.number < current.number && prev.name !== number1.name && prev.name !== number2.name && current.name !== number1.name && current.name !== number2.name) {
+                prev = current;
+            }
+            return prev;
+        });
+    // Return a sorted array of the name property from number1, number2, and number3.
+    return [number1.name, number2.name, number3.name].sort(); 
+};
 
 /**
- * I: 
- * O: 
+ * I: The function receives an array of objects.
+ * O: The function returns
  * C: 
  * E: 
  */

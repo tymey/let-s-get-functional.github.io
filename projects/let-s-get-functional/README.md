@@ -69,13 +69,13 @@ const _ = require('lodown-oliviasaborush');
  - **Objective**: Find how many friends of a given customer have names that start with a given letter
  - **Input**: `Array`, `Customer`, `Letter`
  - **Output**: `Number`
- - **Constraints**:
+ - **Constraints**: 
 
 ### 8: `friendsCount`
  - **Objective**: Find the customers' names that have a given customer's name in their friends list
  - **Input**: `Array`, `Name`
  - **Output**: `Array`
- - **Constraints**:
+ - **Constraints**: use `filter` & `map`
 
 ### 9: `topThreeTags`
  - **Objective**: Find the three most common tags among all customers' associated tags
